@@ -1,0 +1,60 @@
+import json
+
+
+class Parser:
+    @staticmethod
+    def parse_systems(system_data):
+        systems = []
+        for data in system_data:
+            systems.append(System(
+                name=data['name'],
+                system_type=data['system_type'],
+                feeds_in=[Parser.parse_feed(feed) for feed in data.get('feeds_in', [])],
+                feeds_out=[Parser.parse_feed(feed) for feed in data.get('feeds_out', [])],
+                owner=data['owner'],
+                description=data['description']
+            ))
+        return systems
+
+    @staticmethod
+    def parse_feeds(feed_data, systems):
+        feeds = []
+        for data in feed_data:
+            origin_system = next(system for system in systems if system.name == data['origin_system'])
+            target_system = next(system for system in systems if system.name == data['target_system'])
+            attributes = [Parser.parse_attribute(attribute, data['attributes']) for attribute in data['attributes']]
+            
+            feeds.append(Feed(
+                origin_system=origin_system,
+                target_system=target_system,
+                attributes=attributes,
+                granularity=data['granularity'],
+                description=data['description'],
+                owner=data['owner'],
+                technology=data['technology'],
+                format=data['format']
+            ))
+        return feeds
+
+    @staticmethod
+    def parse_attribute(attribute_data, feeds):
+        attributes = []
+        for data in attribute_data:
+            feeds_ref = [next(feed for feed in feeds if feed.origin_system.name == data['origin_system']) for feed in feeds]
+            attributes.append(Attribute(
+                name=data['name'],
+                description=data['description'],
+                owner=data['owner'],
+                origin_system=next(system for system in feeds_ref if system.name == data['origin_system']),
+                feeds=feeds_ref,
+                mapping=data['mapping'],
+                value_data_type=data['value_data_type']
+            ))
+        return attributes
+
+    @staticmethod
+    def parse_json(json_data):
+        systems = Parser.parse_systems(json_data['systems'])
+        feeds = Parser.parse_feeds(json_data['feeds'], systems)
+        attributes = Parser.parse_attribute(json_data['attributes'], feeds)
+        return systems, feeds, attributes
