@@ -1,0 +1,36 @@
+{
+  "systems": [
+    {
+      "name": "Transaction_DB",
+      "type": "Data_Source",
+      "feeds_in": [],
+      "feeds_out": ["Transactions_To_Risk", "Transactions_To_Reporting"],
+      "owner": "Database Team",
+      "description": "Primary database storing raw transaction data."
+    },
+    {
+      "name": "Risk_Calculator",
+      "type": "Processing",
+      "feeds_in": ["Transactions_To_Risk"],
+      "feeds_out": ["Risk_To_Reporting"],
+      "owner": "Analytics Team",
+      "description": "Processes transaction data to calculate risk metrics."
+    },
+    {
+      "name": "Reporting_Tool",
+      "type": "Reporting",
+      "feeds_in": ["Risk_To_Reporting", "Transactions_To_Reporting"],
+      "feeds_out": [],
+      "owner": "Reporting Team",
+      "description": "Generates reports for business stakeholders based on input data."
+    },
+    {
+      "name": "Exchange_Rates_API",
+      "type": "Reference_Data",
+      "feeds_in": [],
+      "feeds_out": ["Exchange_Rates_To_Risk"],
+      "owner": "Data Services Team",
+      "description": "Provides real-time exchange rates for risk calculations."
+    }
+  ]
+}
