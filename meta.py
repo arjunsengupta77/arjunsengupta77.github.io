@@ -10,6 +10,29 @@ class System:
     def __repr__(self):
         return f"System(name={self.name}, system_type={self.system_type}, owner={self.owner})"
 
+    def get_attributes(self):
+        attributes = set()
+
+        for feed in self.feeds_in:
+            for attribute in feed.attributes:
+                attributes.add(attribute)
+
+        for feed in self.feeds_out:
+            for attribute in feed.attributes:
+                attributes.add(attribute)
+
+        for feed in self.feeds_in + self.feeds_out:
+            for attribute in feed.attributes:
+                if feed.origin_system == self:
+                    attributes.add(attribute)
+                if feed.target_system == self:
+                    attributes.add(attribute)
+                if feed.origin_system == self and feed.target_system != self:
+                    if attribute not in attributes:
+                        attributes.add(attribute)
+
+        return list(attributes)
+
 
 class Feed:
     def __init__(self, origin_system, target_system, attributes, granularity, description, owner, technology, format):
