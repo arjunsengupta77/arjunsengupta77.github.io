@@ -1,0 +1,150 @@
+{
+  "attributes": [
+    {
+      "name": "Transaction_ID",
+      "description": "Unique identifier for a transaction.",
+      "owner": "Transaction Team",
+      "origin_system": "Transaction_DB",
+      "feeds": ["Transactions_To_Risk", "Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Transactions_To_Risk": "Transaction_ID",
+        "Risk_Calculations_To_Reporting": "Transaction_ID"
+      },
+      "value_data_type": "String"
+    },
+    {
+      "name": "Customer_ID",
+      "description": "Unique identifier for the customer associated with the transaction.",
+      "owner": "Customer Data Team",
+      "origin_system": "Customer_DB",
+      "feeds": ["Transactions_To_Risk", "Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Transactions_To_Risk": "Customer_ID",
+        "Risk_Calculations_To_Reporting": "Customer_ID"
+      },
+      "value_data_type": "String"
+    },
+    {
+      "name": "Netting_Agreement_ID",
+      "description": "Identifier for the netting agreement associated with the transaction.",
+      "owner": "Risk Team",
+      "origin_system": "Risk_DB",
+      "feeds": ["Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Risk_Calculations_To_Reporting": "Netting_Agreement_ID"
+      },
+      "value_data_type": "String"
+    },
+    {
+      "name": "EPE",
+      "description": "Expected Positive Exposure for the transaction.",
+      "owner": "Risk Team",
+      "origin_system": "Risk_Calculator",
+      "feeds": ["Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Risk_Calculations_To_Reporting": "EPE"
+      },
+      "value_data_type": "Decimal"
+    },
+    {
+      "name": "EEPE",
+      "description": "Effective Expected Positive Exposure, adjusted for mitigants.",
+      "owner": "Risk Team",
+      "origin_system": "Risk_Calculator",
+      "feeds": ["Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Risk_Calculations_To_Reporting": "EEPE"
+      },
+      "value_data_type": "Decimal"
+    },
+    {
+      "name": "WAS",
+      "description": "Weighted Average Spread, used in calculating the risk of the transaction.",
+      "owner": "Risk Team",
+      "origin_system": "Risk_Calculator",
+      "feeds": ["Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Risk_Calculations_To_Reporting": "WAS"
+      },
+      "value_data_type": "Decimal"
+    },
+    {
+      "name": "PD",
+      "description": "Probability of Default for the counterparty.",
+      "owner": "Risk Team",
+      "origin_system": "Risk_Calculator",
+      "feeds": ["Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Risk_Calculations_To_Reporting": "PD"
+      },
+      "value_data_type": "Decimal"
+    },
+    {
+      "name": "LGD",
+      "description": "Loss Given Default for the transaction.",
+      "owner": "Risk Team",
+      "origin_system": "Risk_Calculator",
+      "feeds": ["Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Risk_Calculations_To_Reporting": "LGD"
+      },
+      "value_data_type": "Decimal"
+    },
+    {
+      "name": "Maturity",
+      "description": "Maturity date of the financial instrument.",
+      "owner": "Risk Team",
+      "origin_system": "Risk_Calculator",
+      "feeds": ["Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Risk_Calculations_To_Reporting": "Maturity"
+      },
+      "value_data_type": "Date"
+    },
+    {
+      "name": "Risk_Weight",
+      "description": "Risk weight assigned to the transaction based on regulatory framework.",
+      "owner": "Risk Team",
+      "origin_system": "Risk_Calculator",
+      "feeds": ["Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Risk_Calculations_To_Reporting": "Risk_Weight"
+      },
+      "value_data_type": "Decimal"
+    },
+    {
+      "name": "RWA",
+      "description": "Risk-Weighted Asset value calculated based on risk weight and exposure.",
+      "owner": "Risk Team",
+      "origin_system": "Risk_Calculator",
+      "feeds": ["Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Risk_Calculations_To_Reporting": "RWA"
+      },
+      "value_data_type": "Decimal"
+    },
+    {
+      "name": "Stress_Type",
+      "description": "Type of stress test scenario applied to the transaction.",
+      "owner": "Stress Testing Team",
+      "origin_system": "Stress_Test_DB",
+      "feeds": ["Stress_Test_To_Reporting"],
+      "mapping": {
+        "Stress_Test_To_Reporting": "Stress_Type"
+      },
+      "value_data_type": "String"
+    },
+    {
+      "name": "Legal_Entity",
+      "description": "The legal entity that owns or is associated with the transaction.",
+      "owner": "Legal Entity Team",
+      "origin_system": "Legal_Entity_DB",
+      "feeds": ["Transactions_To_Risk", "Risk_Calculations_To_Reporting"],
+      "mapping": {
+        "Transactions_To_Risk": "Legal_Entity",
+        "Risk_Calculations_To_Reporting": "Legal_Entity"
+      },
+      "value_data_type": "String"
+    }
+  ]
+}
