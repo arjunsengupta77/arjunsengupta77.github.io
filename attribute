@@ -1,0 +1,100 @@
+Attributes and Conditions
+
+1. Name
+
+Type: String
+
+Represents the unique name of the attribute.
+
+This is typically a descriptive name of the data element.
+
+Example: "Transaction_ID", "Customer_Name", "Amount".
+
+
+
+2. Description
+
+Type: String
+
+A short explanation or definition of what the attribute represents.
+
+Example: "Unique identifier for a transaction."
+
+
+
+3. Owner
+
+Type: String
+
+Specifies the team or individual responsible for maintaining the attribute.
+
+Example: "Database Team", "Risk Team".
+
+
+
+4. Origin System
+
+Type: String
+
+The system where the attribute originates from.
+
+It could reference a system name defined in the System entity.
+
+Example: "Transaction_DB", "Customer_DB".
+
+
+
+5. Feeds
+
+Type: Array of Strings
+
+A list of feed names where this attribute is found.
+
+The feeds must reference the names of feeds defined in the Feed entity.
+
+Example: ["Transactions_To_Risk", "Risk_Calculations_To_Reporting"].
+
+
+
+6. Mapping
+
+Type: Dictionary
+
+A dictionary where the key is the feed name, and the value is the column name in that feed where the attribute is located.
+
+Example:
+
+{
+  "Transactions_To_Risk": "Transaction_ID",
+  "Risk_Calculations_To_Reporting": "Transaction_ID"
+}
+
+
+
+7. Value Data Type
+
+Type: String
+
+Specifies the data type of the attribute's value.
+
+Possible values could include: String, Integer, Decimal, Date, Timestamp, Boolean, etc.
+
+Example: "String", "Integer", "Decimal".
+
+
+
+
+
+---
+
+Conditions for Attributes
+
+Name: Should be unique across all attributes.
+
+Origin System: Should be a valid system that is part of the System entity.
+
+Feeds: Must reference one or more valid feed names where this attribute is included.
+
+Mapping: Each feed in the list should have a corresponding column name in the feed.
+
+Value Data Type: Should be consistent with the actual data type of the attribute in all systems and feeds.
