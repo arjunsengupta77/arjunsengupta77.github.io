@@ -1,0 +1,169 @@
+Attributes and Conditions
+
+1. Name
+
+Type: String
+
+Represents the unique identifier for the feed.
+
+Must be descriptive and unique across all feeds.
+
+Typically follows a naming convention indicating origin and target (e.g., Transactions_To_Risk).
+
+
+
+2. Origin
+
+Type: Reference (System Name)
+
+The system generating or providing the feed.
+
+Must reference a valid system name from the System entity.
+
+Conditions:
+
+Must align with the feeds_out of the originating system.
+
+
+
+
+3. Target
+
+Type: Reference (System Name)
+
+The system consuming the feed.
+
+Must reference a valid system name from the System entity.
+
+Conditions:
+
+Must align with the feeds_in of the target system.
+
+
+
+
+4. Attributes
+
+Type: Array of Strings
+
+Represents the list of fields or columns in the feed.
+
+Each field should be clearly named and correspond to the data it represents.
+
+Example: ["Transaction_ID", "Customer_Name", "Amount", "Currency", "Timestamp"].
+
+Conditions:
+
+For Processing systems, these may evolve (added, modified, or passed through).
+
+
+
+
+5. Granularity
+
+Type: String
+
+Describes the level of detail in the feed.
+
+Possible Values:
+
+Record: Individual transaction or event-level data.
+
+Aggregated: Summarized data (e.g., daily totals, averages).
+
+Reference: Static or rarely changing data.
+
+
+Example: "Record"
+
+
+
+6. Description
+
+Type: String
+
+Provides a summary of the feed’s purpose and usage.
+
+Should be concise yet informative.
+
+
+
+7. Owner
+
+Type: String
+
+Specifies the team or individual responsible for maintaining the feed.
+
+Conditions:
+
+Must reference a valid owner responsible for the feed's upkeep and troubleshooting.
+
+
+
+
+8. Technology
+
+Type: String
+
+Indicates the technology or protocol used to transfer the feed.
+
+Examples: SFTP, Kafka, REST API, Database Link.
+
+Conditions:
+
+Should match the capabilities of both the origin and target systems.
+
+
+
+
+9. Format
+
+Type: String
+
+Describes the data format of the feed.
+
+Possible Values:
+
+CSV, JSON, XML, Parquet, Avro, etc.
+
+
+Example: "CSV"
+
+
+
+10. Frequency
+
+Type: String
+
+Indicates how often the feed is generated or transferred.
+
+Possible Values:
+
+Real-time: Continuous updates.
+
+Daily: Once every day.
+
+Weekly: Once a week.
+
+On-Demand: Triggered as needed.
+
+
+Example: "Daily"
+
+
+
+
+
+---
+
+Conditions for Attributes
+
+Name: Must be unique and follow a standard naming convention.
+
+Origin and Target: Must reference valid systems.
+
+Attributes: Must reflect the fields expected in the feed and align with the systems' expectations.
+
+Technology and Format: Should be compatible with the origin and target systems.
+
+Frequency: Must align with the target system’s processing capability.
