@@ -1,0 +1,52 @@
+{
+  "feeds": [
+    {
+      "name": "Transactions_To_Risk",
+      "origin": "Transaction_DB",
+      "target": "Risk_Calculator",
+      "attributes": ["Transaction_ID", "Customer_Name", "Amount", "Currency", "Timestamp"],
+      "granularity": "Record",
+      "description": "Feed containing raw transaction data for risk calculations.",
+      "owner": "Database Team",
+      "technology": "SFTP",
+      "format": "CSV",
+      "frequency": "Daily"
+    },
+    {
+      "name": "Exchange_Rates_To_Risk",
+      "origin": "Exchange_Rates_API",
+      "target": "Risk_Calculator",
+      "attributes": ["Currency", "Exchange_Rate", "Effective_Date"],
+      "granularity": "Reference",
+      "description": "Exchange rate data for converting transaction amounts into base currency.",
+      "owner": "Data Services Team",
+      "technology": "REST API",
+      "format": "JSON",
+      "frequency": "Real-time"
+    },
+    {
+      "name": "Risk_Calculations_To_Reporting",
+      "origin": "Risk_Calculator",
+      "target": "Risk_Report_Generator",
+      "attributes": ["Risk_Score", "Transaction_ID", "Risk_Category", "Timestamp"],
+      "granularity": "Record",
+      "description": "Processed risk calculations sent for reporting generation.",
+      "owner": "Risk Team",
+      "technology": "Kafka",
+      "format": "Avro",
+      "frequency": "Hourly"
+    },
+    {
+      "name": "Customer_Data_To_Reporting",
+      "origin": "Customer_DB",
+      "target": "Customer_Report_Generator",
+      "attributes": ["Customer_ID", "Customer_Name", "Total_Spend", "Last_Purchase_Date"],
+      "granularity": "Aggregated",
+      "description": "Customer data aggregated for monthly reporting.",
+      "owner": "Customer Insights Team",
+      "technology": "SFTP",
+      "format": "CSV",
+      "frequency": "Monthly"
+    }
+  ]
+}
