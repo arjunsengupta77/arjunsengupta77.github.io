@@ -1,0 +1,82 @@
+import re
+from collections import defaultdict
+
+def parse_log_file(log_file_path, source_root, destination_root):
+    # Metrics and data storage
+    new_files = []
+    overwritten_files = []
+    timestamped_copies = []
+
+    # Regex patterns to match log entries
+    new_file_pattern = re.compile(r"Copied new file: (.+) to (.+)")
+    overwritten_file_pattern = re.compile(r"Overwritten file: (.+) to (.+)")
+    timestamped_copy_pattern = re.compile(r"Created a new timestamped copy: (.+) to (.+)")
+
+    with open(log_file_path, 'r') as log_file:
+        for line in log_file:
+            # Check for new file copy
+            match = new_file_pattern.search(line)
+            if match:
+                src_file = match.group(1).replace(source_root, '').lstrip("\\/")
+                new_files.append(src_file)
+                continue
+
+            # Check for overwritten file
+            match = overwritten_file_pattern.search(line)
+            if match:
+                src_file = match.group(1).replace(source_root, '').lstrip("\\/")
+                overwritten_files.append(src_file)
+                continue
+
+            # Check for timestamped copy
+            match = timestamped_copy_pattern.search(line)
+            if match:
+                src_file = match.group(1).replace(source_root, '').lstrip("\\/")
+                timestamped_copies.append(src_file)
+
+    # Generate summary
+    summary = {
+        "new_files_count": len(new_files),
+        "overwritten_files_count": len(overwritten_files),
+        "timestamped_copies_count": len(timestamped_copies),
+        "new_files": new_files,
+        "overwritten_files": overwritten_files,
+        "timestamped_copies": timestamped_copies,
+    }
+
+    return summary
+
+
+def print_and_save_summary(summary, output_file_path):
+    # Prepare summary content
+    summary_content = []
+    summary_content.append("Summary of File Actions:")
+    summary_content.append(f"New Files Copied: {summary['new_files_count']}")
+    summary_content.append(f"Overwritten Files: {summary['overwritten_files_count']}")
+    summary_content.append(f"Timestamped Copies: {summary['timestamped_copies_count']}")
+    summary_content.append("\nList of New Files Copied:")
+    summary_content.extend([f"- {file}" for file in summary["new_files"]])
+    summary_content.append("\nList of Overwritten Files:")
+    summary_content.extend([f"- {file}" for file in summary["overwritten_files"]])
+    summary_content.append("\nList of Timestamped Copies:")
+    summary_content.extend([f"- {file}" for file in summary["timestamped_copies"]])
+
+    # Print summary to console
+    print("\n".join(summary_content))
+
+    # Save summary to file
+    with open(output_file_path, 'w') as output_file:
+        output_file.write("\n".join(summary_content))
+
+
+# Example usage
+log_file_path = "replication_log.txt"  # Path to the log file
+source_root = "C:/path/to/source"  # Root source folder to remove
+destination_root = "C:/path/to/destination"  # Root destination folder to remove
+output_summary_path = "summary_output.txt"  # File to save the summary
+
+# Parse the log file and generate summary
+summary = parse_log_file(log_file_path, source_root, destination_root)
+
+# Print and save the summary
+print_and_save_summary(summary, output_summary_path)
