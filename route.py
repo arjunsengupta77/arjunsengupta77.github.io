@@ -73,7 +73,7 @@ def full_lineage():
     # Add edges (lineages between systems based on AttributeSystemMapping)
     for mapping, system in attribute_system_mappings:
         source_system = system.system_name  # System where the attribute originates
-        target_system = mapping.attribute.origin_system  # Origin system of the attribute
+        target_system = mapping.system_attribute_name  # System that receives the attribute
         
         # Add edge if source and target systems are different
         if source_system != target_system:
@@ -111,7 +111,7 @@ def attribute_lineage(attribute_id):
     # Add edges (lineages between systems based on AttributeSystemMapping)
     for mapping, system in attribute_system_mappings:
         source_system = system.system_name
-        target_system = mapping.attribute.origin_system
+        target_system = mapping.system_attribute_name
         
         # Add edge if source and target systems are different
         if source_system != target_system:
