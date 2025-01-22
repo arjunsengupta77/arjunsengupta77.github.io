@@ -1,17 +1,27 @@
--- Insert feed entries (individual target systems with attribute IDs and system names in descriptions)
-INSERT INTO FEEDS (FEED_ID, ORIGIN_SYSTEM, TARGET_SYSTEM, ATTRIBUTES_CONTAINED, DESCRIPTION)
+-- Combined INSERT for all feed entries with clubbed attributes for a given feed (no spaces between attribute IDs)
+
+-- LoanEngine to ExposureEngine
+INSERT INTO FEEDS (FEED_ID, ORIGIN_SYSTEM, TARGET_SYSTEM, ATTRIBUTE_ID, DESCRIPTION)
 VALUES
-('FEED001', 'SYS004', 'SYS001', 'ATTR002,ATTR020', 'RDS attributes flowing to LoanEngine.'),
-('FEED002', 'SYS004', 'SYS002', 'ATTR002,ATTR020', 'RDS attributes flowing to DerivativeDesk.'),
-('FEED003', 'SYS004', 'SYS003', 'ATTR002,ATTR020', 'RDS attributes flowing to SFTTracker.'),
-('FEED004', 'SYS004', 'SYS005', 'ATTR002,ATTR020', 'RDS attributes flowing to ExposureEngine.'),
-('FEED005', 'SYS001', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'LoanEngine attributes flowing to ExposureEngine.'),
-('FEED006', 'SYS002', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'DerivativeDesk attributes flowing to ExposureEngine.'),
-('FEED007', 'SYS003', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'SFTTracker attributes flowing to ExposureEngine.'),
-('FEED008', 'SYS005', 'SYS006', 'ATTR011,ATTR012,ATTR013', 'ExposureEngine attributes flowing to RWACore.'),
-('FEED009', 'SYS006', 'SYS007', 'ATTR015,ATTR016,ATTR017', 'RWACore attributes flowing to ReportSuite.'),
-('FEED010', 'SYS001', 'SYS007', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'LoanEngine attributes flowing to ReportSuite.'),
-('FEED011', 'SYS002', 'SYS007', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'DerivativeDesk attributes flowing to ReportSuite.'),
-('FEED012', 'SYS003', 'SYS007', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'SFTTracker attributes flowing to ReportSuite.'),
-('FEED013', 'SYS004', 'SYS007', 'ATTR002,ATTR020', 'RDS attributes flowing to ReportSuite.'),
-('FEED014', 'SYS005', 'SYS007', 'ATTR011,ATTR012,ATTR013', 'ExposureEngine attributes flowing to ReportSuite.');
+('FEED001', 'SYS001', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
+ 'LoanEngine attributes Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code flowing to ExposureEngine.'),
+
+-- DerivativeDesk to ExposureEngine
+('FEED002', 'SYS002', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
+ 'DerivativeDesk attributes Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code flowing to ExposureEngine.'),
+
+-- SFTTracker to ExposureEngine
+('FEED003', 'SYS003', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
+ 'SFTTracker attributes Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code flowing to ExposureEngine.'),
+
+-- RDS to ExposureEngine
+('FEED004', 'SYS004', 'SYS005', 'ATTR002,ATTR020', 
+ 'RDS attributes Counterparty_ID, Region_Code flowing to ExposureEngine.'),
+
+-- ExposureEngine to RWACore
+('FEED005', 'SYS005', 'SYS006', 'ATTR011,ATTR012,ATTR013,ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
+ 'ExposureEngine attributes EAD, EPE, PFE, Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code flowing to RWACore.'),
+
+-- RWACore to ReportSuite
+('FEED006', 'SYS006', 'SYS007', 'ATTR015,ATTR016,ATTR017,ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020,ATTR011,ATTR012,ATTR013', 
+ 'RWACore attributes RWA, Risk_Weight, Regulatory_Capital, Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code, EAD, EPE, PFE flowing to ReportSuite.');
