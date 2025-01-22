@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attributes Glossary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Attributes Glossary</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Attribute Name</th>
+                <th>Origin System</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attribute in attributes %}
+            <tr>
+                <td>{{ attribute.attribute_name }}</td>
+                <td>{{ attribute.origin_system }}</td>
+                <td>{{ attribute.definition }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
