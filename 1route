@@ -1,6 +1,46 @@
 from flask import Blueprint, render_template
 from app.models import DataGlossary
 
+from flask import Blueprint, render_template, Response
+import networkx as nx
+import matplotlib.pyplot as plt
+from io import BytesIO
+from app.models import Feed, System
+
+bp = Blueprint('main', __name__)
+
+@bp.route('/lineage')
+def visualize_lineage():
+    # Query all feeds and systems
+    feeds = Feed.query.all()
+    systems = System.query.all()
+
+    # Create a directed graph
+    G = nx.DiGraph()
+
+    # Add systems as nodes
+    for system in systems:
+        G.add_node(system.SYSTEM_NAME)
+
+    # Add edges from feeds (origin -> target)
+    for feed in feeds:
+        G.add_edge(feed.ORIGIN_SYSTEM, feed.TARGET_SYSTEM, feed_id=feed.FEED_ID)
+
+    # Generate the graph visualization
+    plt.figure(figsize=(10, 8))
+    pos = nx.spring_layout(G, seed=42)  # Use a spring layout for the graph
+
+    # Draw the graph
+    nx.draw(G, pos, with_labels=True, node_size=2000, node_color="skyblue", font_size=10, font_weight="bold", arrows=True)
+
+    # Save the figure to a BytesIO object
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    
+    # Return the graph as an image
+    return Response(img, mimetype='image/png')
+
 bp = Blueprint('main', __name__)
 
 @bp.route('/attributes')
