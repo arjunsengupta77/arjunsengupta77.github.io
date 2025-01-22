@@ -1,0 +1,61 @@
+from flask import Blueprint, render_template, Response, request
+import networkx as nx
+import matplotlib.pyplot as plt
+from io import BytesIO
+from app.models import Feed, System, Attribute
+
+bp = Blueprint('main', __name__)
+
+@bp.route('/attribute-lineage')
+def visualize_attribute_lineage():
+    # Get the attribute name from the URL parameter
+    attribute_name = request.args.get('attribute_name')
+    
+    # If no attribute is provided, return an error or a message
+    if not attribute_name:
+        return "Attribute name is required", 400
+    
+    # Query all feeds and systems
+    feeds = Feed.query.all()
+    systems = System.query.all()
+
+    # Get the attribute's ID from the glossary
+    attribute = Attribute.query.filter_by(attribute_name=attribute_name).first()
+    
+    if not attribute:
+        return f"Attribute {attribute_name} not found", 404
+
+    # Create a mapping from SYSTEM_ID to SYSTEM_NAME
+    system_id_to_name = {system.SYSTEM_ID: system.SYSTEM_NAME for system in systems}
+
+    # Create a directed graph for the attribute-specific lineage
+    G = nx.DiGraph()
+
+    # Add systems as nodes
+    for system in systems:
+        G.add_node(system.SYSTEM_NAME)
+
+    # Find feeds that contain the given attribute and add edges
+    for feed in feeds:
+        # If the attribute is contained in the feed, trace the flow
+        if attribute.ATTRIBUTE_ID in feed.ATTRIBUTES_CONTAINED.split(','):
+            origin_system_name = system_id_to_name.get(feed.ORIGIN_SYSTEM)
+            target_system_name = system_id_to_name.get(feed.TARGET_SYSTEM)
+
+            if origin_system_name and target_system_name:
+                G.add_edge(origin_system_name, target_system_name, feed_id=feed.FEED_ID, attribute=attribute_name)
+
+    # Generate the graph visualization
+    plt.figure(figsize=(10, 8))
+    pos = nx.spring_layout(G, seed=42)  # Use a spring layout for the graph
+
+    # Draw the graph
+    nx.draw(G, pos, with_labels=True, node_size=2000, node_color="skyblue", font_size=10, font_weight="bold", arrows=True)
+
+    # Save the figure to a BytesIO object
+    img = BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    
+    # Return the graph as an image
+    return Response(img, mimetype='image/png')
