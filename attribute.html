@@ -1,34 +1,60 @@
-from flask import Blueprint, render_template, request
-from app.models import Attribute, Feed, System
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attribute Details</title>
+</head>
+<body>
+    <h1>Attribute Details</h1>
+    
+    <!-- Attribute Details -->
+    <h3>Attribute Information</h3>
+    <p><strong>Name:</strong> {{ attribute.ATTRIBUTE_NAME }}</p>
+    <p><strong>Description:</strong> {{ attribute.DEFINITION }}</p>
+    <p><strong>Origin System:</strong> {{ system.SYSTEM_NAME }}</p>
 
-bp = Blueprint('main', __name__)
+    <!-- Table for Feeds -->
+    <h3>Feeds Available</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Feed ID</th>
+                <th>Origin System</th>
+                <th>Target System</th>
+                <th>Attributes Contained</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for feed in feeds %}
+            <tr>
+                <td>{{ feed.FEED_ID }}</td>
+                <td>{{ feed.ORIGIN_SYSTEM }}</td>
+                <td>{{ feed.TARGET_SYSTEM }}</td>
+                <td>{{ feed.ATTRIBUTES_CONTAINED }}</td>
+                <td>{{ feed.DESCRIPTION }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-@bp.route('/attribute-details')
-def attribute_details():
-    attribute_id = request.args.get('attribute_id')
+    <!-- External Links Form -->
+    <h3>Add External Links</h3>
+    <form method="POST">
+        <label for="external_links">External Links:</label><br>
+        <input type="text" name="external_links" placeholder="Enter external link"><br><br>
+        <input type="text" name="external_links" placeholder="Enter another external link"><br><br>
+        <input type="submit" value="Add Links">
+    </form>
     
-    # If no attribute_id is provided, return an error or a message
-    if not attribute_id:
-        return "Attribute ID is required", 400
-    
-    # Query the attribute based on the attribute_id
-    attribute = Attribute.query.filter_by(ATTRIBUTE_ID=attribute_id).first()
-    
-    if not attribute:
-        return f"Attribute with ID {attribute_id} not found", 404
-    
-    # Query the feeds that contain the given attribute
-    feeds = Feed.query.filter(Feed.ATTRIBUTES_CONTAINED.like(f"%{attribute_id}%")).all()
-    
-    # Query the origin system from the systems table
-    system = System.query.filter_by(SYSTEM_ID=attribute.ORIGIN_SYSTEM).first()
-
-    # Handle the addition of external links (if passed via the form)
-    if request.method == 'POST':
-        external_links = request.form.getlist('external_links')
-        # Logic to store or process external links can be added here
-
-    return render_template('attribute_details.html', 
-                           attribute=attribute, 
-                           system=system, 
-                           feeds=feeds)
+    {% if request.method == 'POST' %}
+    <h3>External Links Added:</h3>
+    <ul>
+        {% for link in request.form.getlist('external_links') %}
+        <li>{{ link }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
