@@ -1,20 +1,14 @@
-<!-- templates/full_lineage.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full Lineage of Systems</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Full Lineage</title>
 </head>
 <body>
-    <header>
-        <h1>Full Lineage of Systems</h1>
-    </header>
-    <section>
-        <div>
-            <img src="{{ url_for('routes.full_lineage') }}" alt="Full Lineage Graph">
-        </div>
-    </section>
+    <h1>Full Lineage Visualization</h1>
+    <div>
+        {{ graph_html|safe }}
+    </div>
 </body>
 </html>
