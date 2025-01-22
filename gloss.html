@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Glossary</title>
+</head>
+<body>
+    <h1>Attribute Glossary</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Attribute Name</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Origin System</th>
+                <th>Data Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attribute in attributes %}
+            <tr>
+                <td>{{ attribute.id }}</td>
+                <td>{{ attribute.attribute_name }}</td>
+                <td>{{ attribute.description }}</td>
+                <td>{{ attribute.owner }}</td>
+                <td>{{ attribute.origin_system }}</td>
+                <td>{{ attribute.value_data_type }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
