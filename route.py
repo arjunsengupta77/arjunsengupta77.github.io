@@ -2,7 +2,7 @@ import plotly.graph_objects as go
 import networkx as nx
 from flask import Blueprint, render_template
 from app import db  # Assuming you're using SQLAlchemy for your models
-from app.models import Attribute, System, Lineage  # Update with your actual models
+from app.models import Attribute, System, AttributeSystemMapping  # Your actual models
 
 # Create the blueprint for lineage routes
 lineage_bp = Blueprint('lineage', __name__)
@@ -81,12 +81,15 @@ def full_lineage():
 
     # Add nodes (systems)
     for system in systems:
-        G.add_node(system.name, pos=(system.x_pos, system.y_pos), label=system.name)
+        G.add_node(system.system_name, pos=(system.system_id, system.system_id), label=system.system_name)
 
     # Add edges (lineages between systems)
-    lineages = Lineage.query.all()
-    for lineage in lineages:
-        G.add_edge(lineage.source_system.name, lineage.target_system.name)
+    attribute_system_mappings = AttributeSystemMapping.query.all()  # This represents the relationship between systems and attributes
+    for attribute_system_mapping in attribute_system_mappings:
+        source_system = attribute_system_mapping.system.system_name
+        target_system = attribute_system_mapping.attribute.origin_system
+        if source_system != target_system:
+            G.add_edge(source_system, target_system)
 
     # Generate Plotly graph
     nodes = [{'label': system['label'], 'pos': system['pos']} for system in G.nodes(data=True)]
@@ -107,13 +110,17 @@ def attribute_lineage(attribute_id):
     G = nx.DiGraph()
 
     # Add nodes (systems related to the attribute)
-    systems = attribute.systems
-    for system in systems:
-        G.add_node(system.name, pos=(system.x_pos, system.y_pos), label=system.name)
+    attribute_system_mappings = AttributeSystemMapping.query.filter_by(attribute_id=attribute_id).all()
+    for attribute_system_mapping in attribute_system_mappings:
+        system = attribute_system_mapping.system
+        G.add_node(system.system_name, pos=(system.system_id, system.system_id), label=system.system_name)
 
     # Add edges (lineages between systems)
-    for lineage in Lineage.query.filter_by(attribute_id=attribute.id):
-        G.add_edge(lineage.source_system.name, lineage.target_system.name)
+    for attribute_system_mapping in attribute_system_mappings:
+        source_system = attribute_system_mapping.system.system_name
+        target_system = attribute_system_mapping.attribute.origin_system
+        if source_system != target_system:
+            G.add_edge(source_system, target_system)
 
     # Generate Plotly graph
     nodes = [{'label': system['label'], 'pos': system['pos']} for system in G.nodes(data=True)]
