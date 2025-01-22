@@ -1,15 +1,23 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from blueprints.glossary import glossary_bp
-from blueprints.lineage import lineage_bp
+from config import Config
 
-app = Flask(__name__)
-app.config.from_object("config.Config")
-db = SQLAlchemy(app)
+# Initialize SQLAlchemy
+db = SQLAlchemy()
 
-# Register blueprints
-app.register_blueprint(glossary_bp, url_prefix="/glossary")
-app.register_blueprint(lineage_bp, url_prefix="/lineage")
+def create_app():
+    """Factory function to create and configure the Flask app."""
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+    # Initialize extensions
+    db.init_app(app)
+
+    # Register blueprints
+    from lineage.glossary.routes import glossary_bp
+    from lineage.visualization.routes import visualization_bp
+
+    app.register_blueprint(glossary_bp, url_prefix="/glossary")
+    app.register_blueprint(visualization_bp, url_prefix="/visualization")
+
+    return app)
