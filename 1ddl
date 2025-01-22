@@ -14,14 +14,41 @@ VALUES
 ('FEED003', 'SYS003', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
  'SFTTracker attributes Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code flowing to ExposureEngine.'),
 
--- RDS to ExposureEngine
-('FEED004', 'SYS004', 'SYS005', 'ATTR002,ATTR020', 
+-- RDS to all systems
+('FEED004', 'SYS004', 'SYS001', 'ATTR002,ATTR020', 
+ 'RDS attributes Counterparty_ID, Region_Code flowing to LoanEngine.'),
+
+('FEED005', 'SYS004', 'SYS002', 'ATTR002,ATTR020', 
+ 'RDS attributes Counterparty_ID, Region_Code flowing to DerivativeDesk.'),
+
+('FEED006', 'SYS004', 'SYS003', 'ATTR002,ATTR020', 
+ 'RDS attributes Counterparty_ID, Region_Code flowing to SFTTracker.'),
+
+('FEED007', 'SYS004', 'SYS005', 'ATTR002,ATTR020', 
  'RDS attributes Counterparty_ID, Region_Code flowing to ExposureEngine.'),
 
+('FEED008', 'SYS004', 'SYS006', 'ATTR002,ATTR020', 
+ 'RDS attributes Counterparty_ID, Region_Code flowing to RWACore.'),
+
+('FEED009', 'SYS004', 'SYS007', 'ATTR002,ATTR020', 
+ 'RDS attributes Counterparty_ID, Region_Code flowing to ReportSuite.'),
+
+-- LoanEngine to Reporting Suite
+('FEED010', 'SYS001', 'SYS007', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
+ 'LoanEngine attributes Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code flowing to ReportSuite.'),
+
+-- DerivativeDesk to Reporting Suite
+('FEED011', 'SYS002', 'SYS007', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
+ 'DerivativeDesk attributes Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code flowing to ReportSuite.'),
+
+-- SFTTracker to Reporting Suite
+('FEED012', 'SYS003', 'SYS007', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
+ 'SFTTracker attributes Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code flowing to ReportSuite.'),
+
 -- ExposureEngine to RWACore
-('FEED005', 'SYS005', 'SYS006', 'ATTR011,ATTR012,ATTR013,ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
+('FEED013', 'SYS005', 'SYS006', 'ATTR011,ATTR012,ATTR013,ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020', 
  'ExposureEngine attributes EAD, EPE, PFE, Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code flowing to RWACore.'),
 
 -- RWACore to ReportSuite
-('FEED006', 'SYS006', 'SYS007', 'ATTR015,ATTR016,ATTR017,ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020,ATTR011,ATTR012,ATTR013', 
+('FEED014', 'SYS006', 'SYS007', 'ATTR015,ATTR016,ATTR017,ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010,ATTR002,ATTR020,ATTR011,ATTR012,ATTR013', 
  'RWACore attributes RWA, Risk_Weight, Regulatory_Capital, Transaction_ID, Exposure_Amount, Currency, MPOR, Netting_Agreement_ID, Booking_Date, Settlement_Date, Maturity_Date, Counterparty_ID, Region_Code, EAD, EPE, PFE flowing to ReportSuite.');
