@@ -1,33 +1,39 @@
+<!-- templates/glossary.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Glossary</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glossary of Attributes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Attribute Glossary</h1>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Attribute Name</th>
-                <th>Description</th>
-                <th>Owner</th>
-                <th>Origin System</th>
-                <th>Data Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for attribute in attributes %}
-            <tr>
-                <td>{{ attribute.id }}</td>
-                <td>{{ attribute.attribute_name }}</td>
-                <td>{{ attribute.description }}</td>
-                <td>{{ attribute.owner }}</td>
-                <td>{{ attribute.origin_system }}</td>
-                <td>{{ attribute.value_data_type }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <header>
+        <h1>Glossary of Attributes</h1>
+    </header>
+    <section>
+        <table>
+            <thead>
+                <tr>
+                    <th>Attribute Name</th>
+                    <th>Definition</th>
+                    <th>Origin Systems</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attribute in attributes %}
+                <tr>
+                    <td>{{ attribute.name }}</td>
+                    <td>{{ attribute.definition }}</td>
+                    <td>
+                        {% for system in attribute.systems %}
+                            {{ system.name }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 </body>
 </html>
