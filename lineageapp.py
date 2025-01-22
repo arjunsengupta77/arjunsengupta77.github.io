@@ -1,23 +1,24 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from config import Config
+import os
 
-# Initialize SQLAlchemy
+# Initialize the SQLAlchemy object
 db = SQLAlchemy()
 
 def create_app():
-    """Factory function to create and configure the Flask app."""
+    # Create and configure the app
     app = Flask(__name__)
-    app.config.from_object(Config)
-
-    # Initialize extensions
+    
+    # Set the database URI to point to lineage.db in the parent folder
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{os.path.join(os.path.abspath(os.path.dirname(__file__)), "../lineage.db")}'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SECRET_KEY'] = 'your_secret_key_here'  # Replace with a secure secret key
+    
+    # Initialize the database with the app
     db.init_app(app)
+    
+    # Import and register routes
+    from .routes import main_bp
+    app.register_blueprint(main_bp)
 
-    # Register blueprints
-    from lineage.glossary.routes import glossary_bp
-    from lineage.visualization.routes import visualization_bp
-
-    app.register_blueprint(glossary_bp, url_prefix="/glossary")
-    app.register_blueprint(visualization_bp, url_prefix="/visualization")
-
-    return app)
+    return app
