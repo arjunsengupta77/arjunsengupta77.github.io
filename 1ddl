@@ -1,27 +1,17 @@
--- Insert attribute entries with system IDs as origin systems
-INSERT INTO DATA_GLOSSARY (ATTRIBUTE_ID, ATTRIBUTE_NAME, DEFINITION, OWNER, ORIGIN_SYSTEM)
+-- Insert feed entries (individual target systems with attribute IDs and system names in descriptions)
+INSERT INTO FEEDS (FEED_ID, ORIGIN_SYSTEM, TARGET_SYSTEM, ATTRIBUTES_CONTAINED, DESCRIPTION)
 VALUES
-('ATTR001', 'Transaction_ID', 'Unique identifier for each transaction or trade.', 'Transaction Team', 'SYS001,SYS002,SYS003'),
-('ATTR002', 'Counterparty_ID', 'Unique identifier for the counterparty involved in the transaction.', 'Reference Data Team', 'SYS004'),
-('ATTR003', 'Exposure_Amount', 'Nominal value or exposure amount of a transaction.', 'Transaction Team', 'SYS001,SYS002,SYS003'),
-('ATTR004', 'Collateral_Value', 'Value of collateral posted for a transaction.', 'Risk Team', 'SYS004'),
-('ATTR005', 'Currency', 'Currency in which the transaction is denominated.', 'Transaction Team', 'SYS001,SYS002,SYS003'),
-('ATTR006', 'MPOR', 'Margin Period of Risk for the transaction.', 'Risk Team', 'SYS001,SYS002,SYS003'),
-('ATTR007', 'Netting_Agreement_ID', 'Identifier for the netting agreement associated with the transaction.', 'Risk Team', 'SYS001,SYS002,SYS003'),
-('ATTR008', 'Booking_Date', 'Date when the transaction was booked.', 'Transaction Team', 'SYS001,SYS002,SYS003'),
-('ATTR009', 'Settlement_Date', 'Date when the transaction settles.', 'Transaction Team', 'SYS001,SYS002,SYS003'),
-('ATTR010', 'Maturity_Date', 'Date when the transaction matures.', 'Transaction Team', 'SYS001,SYS002,SYS003'),
-('ATTR011', 'EAD', 'Calculated exposure at default value for a transaction.', 'Risk Team', 'SYS005'),
-('ATTR012', 'EPE', 'Expected Positive Exposure for a transaction.', 'Risk Team', 'SYS005'),
-('ATTR013', 'PFE', 'Potential Future Exposure for a transaction.', 'Risk Team', 'SYS005'),
-('ATTR014', 'PD', 'Probability of Default for the counterparty.', 'Risk Team', 'SYS004'),
-('ATTR015', 'LGD', 'Loss Given Default for the transaction.', 'Risk Team', 'SYS006'),
-('ATTR016', 'RWA', 'Risk-Weighted Asset value calculated based on EAD, PD, and LGD.', 'Risk Team', 'SYS006'),
-('ATTR017', 'Risk_Weight', 'Regulatory risk weight assigned to a transaction based on product and counterparty risk.', 'Risk Team', 'SYS006'),
-('ATTR018', 'Regulatory_Capital', 'Amount of capital required under regulatory rules for a transaction or portfolio.', 'Risk Team', 'SYS006'),
-('ATTR019', 'COB_Date', 'Close of Business date for reporting purposes.', 'Reporting Team', 'SYS007'),
-('ATTR020', 'Region_Code', 'Geographical code for the counterparty or transaction region.', 'Reference Data Team', 'SYS004'),
-('ATTR021', 'SWWR_Flag', 'Indicates if the transaction is under a worst-case scenario analysis.', 'Risk Team', 'SYS005'),
-('ATTR022', 'Stress_Scenario', 'Specific stress test scenario applied to the transaction.', 'Stress Testing Team', 'SYS005'),
-('ATTR023', 'Netting_Set_ID', 'Identifier for the netting set associated with the transaction.', 'Risk Team', 'SYS005'),
-('ATTR024', 'Counterparty_Name', 'Name of the counterparty involved in the transaction.', 'Reference Data Team', 'SYS004');
+('FEED001', 'SYS004', 'SYS001', 'ATTR002,ATTR020', 'RDS attributes flowing to LoanEngine.'),
+('FEED002', 'SYS004', 'SYS002', 'ATTR002,ATTR020', 'RDS attributes flowing to DerivativeDesk.'),
+('FEED003', 'SYS004', 'SYS003', 'ATTR002,ATTR020', 'RDS attributes flowing to SFTTracker.'),
+('FEED004', 'SYS004', 'SYS005', 'ATTR002,ATTR020', 'RDS attributes flowing to ExposureEngine.'),
+('FEED005', 'SYS001', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'LoanEngine attributes flowing to ExposureEngine.'),
+('FEED006', 'SYS002', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'DerivativeDesk attributes flowing to ExposureEngine.'),
+('FEED007', 'SYS003', 'SYS005', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'SFTTracker attributes flowing to ExposureEngine.'),
+('FEED008', 'SYS005', 'SYS006', 'ATTR011,ATTR012,ATTR013', 'ExposureEngine attributes flowing to RWACore.'),
+('FEED009', 'SYS006', 'SYS007', 'ATTR015,ATTR016,ATTR017', 'RWACore attributes flowing to ReportSuite.'),
+('FEED010', 'SYS001', 'SYS007', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'LoanEngine attributes flowing to ReportSuite.'),
+('FEED011', 'SYS002', 'SYS007', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'DerivativeDesk attributes flowing to ReportSuite.'),
+('FEED012', 'SYS003', 'SYS007', 'ATTR001,ATTR003,ATTR005,ATTR006,ATTR007,ATTR008,ATTR009,ATTR010', 'SFTTracker attributes flowing to ReportSuite.'),
+('FEED013', 'SYS004', 'SYS007', 'ATTR002,ATTR020', 'RDS attributes flowing to ReportSuite.'),
+('FEED014', 'SYS005', 'SYS007', 'ATTR011,ATTR012,ATTR013', 'ExposureEngine attributes flowing to ReportSuite.');
