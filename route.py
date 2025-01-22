@@ -66,8 +66,9 @@ def full_lineage():
     for system in systems:
         G.add_node(system.system_name, label=system.system_name)
 
-    # Query all attribute-system mappings, joining with systems and attributes
-    attribute_system_mappings = db.session.query(AttributeSystemMapping, System).join(System).all()
+    # Query all attribute-system mappings with explicit JOIN
+    attribute_system_mappings = db.session.query(AttributeSystemMapping, System) \
+        .join(System, AttributeSystemMapping.system_id == System.system_id).all()
 
     # Add edges (lineages between systems based on AttributeSystemMapping)
     for mapping, system in attribute_system_mappings:
@@ -93,21 +94,23 @@ def full_lineage():
 def attribute_lineage(attribute_id):
     attribute = Attribute.query.get_or_404(attribute_id)
 
-    # Query systems associated with the given attribute
-    attribute_system_mappings = AttributeSystemMapping.query.filter_by(attribute_id=attribute_id).all()
+    # Query systems associated with the given attribute using explicit JOIN
+    attribute_system_mappings = db.session.query(AttributeSystemMapping, System) \
+        .join(System, AttributeSystemMapping.system_id == System.system_id) \
+        .filter(AttributeSystemMapping.attribute_id == attribute_id).all()
     
     # Create a directed graph with NetworkX
     G = nx.DiGraph()
 
     # Add nodes (systems)
     systems = set()
-    for mapping in attribute_system_mappings:
-        systems.add(mapping.system.system_name)
-        G.add_node(mapping.system.system_name)
+    for mapping, system in attribute_system_mappings:
+        systems.add(system.system_name)
+        G.add_node(system.system_name)
 
     # Add edges (lineages between systems based on AttributeSystemMapping)
-    for mapping in attribute_system_mappings:
-        source_system = mapping.system.system_name
+    for mapping, system in attribute_system_mappings:
+        source_system = system.system_name
         target_system = mapping.attribute.origin_system
         
         # Add edge if source and target systems are different
