@@ -20,23 +20,47 @@ def full_lineage():
     attribute_system_mappings = db.session.query(AttributeSystemMapping, System) \
         .join(System, AttributeSystemMapping.system_id == System.system_id).all()
 
+    # Prepare nodes and edges for visualization
+    nodes = set()
+    edges = []
+
     # Add edges (lineages between systems based on AttributeSystemMapping)
     for mapping, system in attribute_system_mappings:
         source_system = system.system_name  # Access the System's name
         target_system = mapping.system_attribute_name  # Access the system attribute name from the mapping
-        
-        # Add edge if source and target systems are different
-        if source_system != target_system:
-            G.add_edge(source_system, target_system)
 
-    # Generate the layout for the plot
+        # Add to nodes set to ensure unique nodes
+        nodes.add(source_system)
+        nodes.add(target_system)
+
+        # Add the edge between source and target systems
+        edges.append((source_system, target_system))
+
+    # Create the layout for the graph
+    node_positions = {node: (i, 0) for i, node in enumerate(nodes)}  # Simple layout with nodes in a line
+
+    # Create the scatter plot for nodes
+    node_x = [node_positions[node][0] for node in nodes]
+    node_y = [node_positions[node][1] for node in nodes]
+
+    # Add nodes as Scatter objects
+    G.add_trace(go.Scatter(x=node_x, y=node_y, mode='markers+text', text=list(nodes), textposition='top center', marker=dict(size=10, color='blue')))
+
+    # Add edges as lines between nodes
+    for edge in edges:
+        source, target = edge
+        source_x, source_y = node_positions[source]
+        target_x, target_y = node_positions[target]
+
+        G.add_trace(go.Scatter(x=[source_x, target_x], y=[source_y, target_y], mode='lines', line=dict(width=1, color='black')))
+
+    # Set layout for the plot
     layout = {
         'title': 'System Lineage',
         'xaxis': {'title': 'Systems'},
         'yaxis': {'title': 'Systems'},
     }
-    
-    # Set the layout and return the graph
+
     G.update_layout(layout)
     return render_template('lineage.html', graph=G.to_html(full_html=False))
 
@@ -56,22 +80,46 @@ def attribute_lineage(attribute_id):
         .join(System, AttributeSystemMapping.system_id == System.system_id) \
         .filter(AttributeSystemMapping.attribute_id == attribute_id).all()
 
+    # Prepare nodes and edges for visualization
+    nodes = set()
+    edges = []
+
     # Add edges (lineages between systems based on AttributeSystemMapping)
     for mapping, system in attribute_system_mappings:
         source_system = system.system_name  # Access the System's name
         target_system = mapping.system_attribute_name  # Access the system attribute name from the mapping
-        
-        # Add edge if source and target systems are different
-        if source_system != target_system:
-            G.add_edge(source_system, target_system)
 
-    # Generate the layout for the plot
+        # Add to nodes set to ensure unique nodes
+        nodes.add(source_system)
+        nodes.add(target_system)
+
+        # Add the edge between source and target systems
+        edges.append((source_system, target_system))
+
+    # Create the layout for the graph
+    node_positions = {node: (i, 0) for i, node in enumerate(nodes)}  # Simple layout with nodes in a line
+
+    # Create the scatter plot for nodes
+    node_x = [node_positions[node][0] for node in nodes]
+    node_y = [node_positions[node][1] for node in nodes]
+
+    # Add nodes as Scatter objects
+    G.add_trace(go.Scatter(x=node_x, y=node_y, mode='markers+text', text=list(nodes), textposition='top center', marker=dict(size=10, color='blue')))
+
+    # Add edges as lines between nodes
+    for edge in edges:
+        source, target = edge
+        source_x, source_y = node_positions[source]
+        target_x, target_y = node_positions[target]
+
+        G.add_trace(go.Scatter(x=[source_x, target_x], y=[source_y, target_y], mode='lines', line=dict(width=1, color='black')))
+
+    # Set layout for the plot
     layout = {
         'title': f'Lineage of {attribute.attribute_name}',
         'xaxis': {'title': 'Systems'},
         'yaxis': {'title': 'Systems'},
     }
 
-    # Set the layout and return the graph
     G.update_layout(layout)
     return render_template('lineage_attribute.html', graph=G.to_html(full_html=False), attribute=attribute)
