@@ -1,52 +1,50 @@
 from selenium import webdriver
+from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# Set up the driver (using Chrome here)
-driver = webdriver.Chrome()
+# Optional: use your actual path to msedgedriver if not in PATH
+# service = EdgeService(executable_path="C:/path/to/msedgedriver.exe")
+# driver = webdriver.Edge(service=service)
+
+# If Edge WebDriver is in PATH:
+driver = webdriver.Edge()
 
 try:
-    # Step 1: Open the browser and navigate to the URL
+    # Step 1: Go to the initial URL
     driver.get("https://example.com")
 
-    # Step 2: Wait for and click the button to go to new page
-    button = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.ID, "nextPageButton"))
+    # Step 2: Click the div with specific text
+    clickable_div = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, "//div[text()='Continue']"))
     )
-    button.click()
+    clickable_div.click()
 
-    # Step 3: Find hyperlink with specific text and click it
+    # Step 3: Click hyperlink with specific text
     link = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.LINK_TEXT, "Target Page Link"))
     )
     link.click()
 
-    # Step 4: Wait for form to load and fill it
+    # Step 4: Modify form fields
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.ID, "formElementId"))
     )
 
-    # Modify text field
-    text_input = driver.find_element(By.NAME, "username")
-    text_input.clear()
-    text_input.send_keys("John Doe")
+    driver.find_element(By.NAME, "username").send_keys("John Doe")
 
-    # Modify number field
-    number_input = driver.find_element(By.NAME, "age")
-    number_input.clear()
-    number_input.send_keys("30")
+    age_field = driver.find_element(By.NAME, "age")
+    age_field.clear()
+    age_field.send_keys("30")
 
-    # Select from dropdown
-    dropdown = Select(driver.find_element(By.NAME, "country"))
-    dropdown.select_by_visible_text("India")
+    country_select = Select(driver.find_element(By.NAME, "country"))
+    country_select.select_by_visible_text("India")
 
     # Step 5: Click the save button
-    save_button = driver.find_element(By.ID, "saveButton")
-    save_button.click()
+    driver.find_element(By.ID, "saveButton").click()
 
-    # Wait a moment to observe result
     time.sleep(3)
 
 finally:
