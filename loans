@@ -1,0 +1,42 @@
+CREATE TABLE loans (
+    loan_id INT PRIMARY KEY,
+    customer_id INT,
+    loan_amount DECIMAL(15,2),
+    loan_type VARCHAR(50),
+    secured BOOLEAN,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+INSERT INTO loans (loan_id, customer_id, loan_amount, loan_type, secured) VALUES
+(5000101, 10001, 1000000.00, 'Term Loan', TRUE),
+(5000102, 10001, 500000.00, 'Overdraft', TRUE),
+(5000103, 10002, 2000000.00, 'Working Capital', TRUE),
+(5000104, 10003, 300000.00, 'Term Loan', TRUE),
+(5000105, 10004, 250000.00, 'Term Loan', TRUE),
+(5000106, 10005, 1500000.00, 'Working Capital', TRUE),
+(5000107, 10005, 700000.00, 'Term Loan', TRUE),
+(5000108, 10006, 3200000.00, 'Overdraft', TRUE),
+(5000109, 10007, 450000.00, 'Working Capital', TRUE),
+(5000110, 10008, 600000.00, 'Term Loan', TRUE),
+-- unsecured loans
+(5000111, 10001, 400000.00, 'Term Loan', FALSE),
+(5000112, 10002, 1000000.00, 'Overdraft', FALSE),
+(5000113, 10003, 1300000.00, 'Working Capital', FALSE),
+(5000114, 10004, 1400000.00, 'Term Loan', FALSE),
+(5000115, 10005, 500000.00, 'Overdraft', FALSE),
+(5000116, 10006, 850000.00, 'Working Capital', FALSE),
+(5000117, 10007, 450000.00, 'Term Loan', FALSE),
+(5000118, 10008, 3200000.00, 'Overdraft', FALSE),
+(5000119, 10009, 300000.00, 'Working Capital', FALSE),
+(5000120, 10010, 1000000.00, 'Term Loan', FALSE),
+-- additional secured loans
+(5000121, 10009, 2000000.00, 'Term Loan', TRUE),
+(5000122, 10009, 750000.00, 'Overdraft', TRUE),
+(5000123, 10010, 950000.00, 'Working Capital', TRUE),
+(5000124, 10010, 1100000.00, 'Term Loan', TRUE),
+(5000125, 10007, 600000.00, 'Overdraft', TRUE),
+(5000126, 10008, 1200000.00, 'Term Loan', TRUE),
+(5000127, 10002, 500000.00, 'Working Capital', TRUE),
+(5000128, 10003, 800000.00, 'Term Loan', TRUE),
+(5000129, 10004, 650000.00, 'Overdraft', TRUE),
+(5000130, 10005, 1200000.00, 'Term Loan', TRUE);
