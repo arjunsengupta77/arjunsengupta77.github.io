@@ -1,0 +1,29 @@
+CREATE TABLE collateral (
+    collateral_id INT PRIMARY KEY,
+    loan_id INT,
+    collateral_type VARCHAR(50),
+    collateral_value DECIMAL(15,2),
+    FOREIGN KEY (loan_id) REFERENCES loans(loan_id)
+);
+
+INSERT INTO collateral (collateral_id, loan_id, collateral_type, collateral_value) VALUES
+(70000201, 5000101, 'Guarantee', 1400000.00),
+(70000202, 5000102, 'Security', 600000.00),
+(70000203, 5000103, 'Security', 2500000.00),
+(70000204, 5000104, 'Guarantee', 400000.00),
+(70000205, 5000105, 'Cash', 350000.00),
+(70000206, 5000106, 'Security', 1600000.00),
+(70000207, 5000107, 'Guarantee', 800000.00),
+(70000208, 5000108, 'Guarantee', 3000000.00),
+(70000209, 5000109, 'Cash', 500000.00),
+(70000210, 5000110, 'Security', 700000.00),
+(70000211, 5000121, 'Stock', 600000.00),
+(70000212, 5000122, 'Guarantee', 1000000.00),
+(70000213, 5000123, 'Guarantee', 1300000.00),
+(70000214, 5000124, 'Security', 1400000.00),
+(70000215, 5000125, 'Stock', 500000.00),
+(70000216, 5000126, 'Security', 850000.00),
+(70000217, 5000127, 'Guarantee', 450000.00),
+(70000218, 5000128, 'Security', 3200000.00),
+(70000219, 5000129, 'Guarantee', 300000.00),
+(70000220, 5000130, 'Guarantee', 1000000.00);
