@@ -1,0 +1,19 @@
+SELECT
+    customers.customer_name,
+    collateral.collateral_type,
+    COUNT(loans.loan_id) AS total_loans,
+    SUM(loans.loan_amount) AS total_loan_amount,
+    AVG(loans.loan_amount) AS average_loan_amount
+FROM
+    customers
+INNER JOIN loans
+    ON customers.customer_id = loans.customer_id
+INNER JOIN collateral
+    ON loans.loan_id = collateral.loan_id
+GROUP BY
+    customers.customer_name,
+    collateral.collateral_type
+HAVING
+    SUM(loans.loan_amount) > 500000  -- Only show customers with loan amounts > 500,000
+ORDER BY
+    total_loan_amount DESC;
