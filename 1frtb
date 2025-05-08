@@ -205,3 +205,67 @@ PLAT and NMRFs improve accuracy and limit model overuse
 
 Would you like this formatted for a presentation slide or one-pager handout?
 
+Expected Shortfall (ES) — also known as Conditional VaR — is a risk measure that improves upon traditional Value at Risk (VaR) by capturing losses in the tail of the distribution.
+
+
+---
+
+What is ES?
+
+Definition: ES is the average loss you expect to suffer beyond a certain confidence level.
+
+If VaR at 97.5% says “there’s a 2.5% chance of losing more than ₹X,”
+then ES tells you the average loss in that worst 2.5% of cases.
+
+
+
+---
+
+Formula (Intuition)
+
+\text{ES}_{97.5\%} = \mathbb{E}[\text{Loss} \mid \text{Loss} > \text{VaR}_{97.5\%}]
+
+This means:
+
+> “Given that losses exceed the VaR threshold, how bad are they on average?”
+
+
+
+
+---
+
+Why ES is Better Than VaR
+
+Feature	VaR	ES
+
+Tail Risk	Ignores extreme losses beyond the threshold	Captures all extreme losses
+Sub-additivity (risk aggregation)	Fails for some distributions	Always sub-additive — respects diversification
+Capital sensitivity	May underestimate in stressed markets	More conservative and realistic
+
+
+
+---
+
+Example
+
+Say you have a portfolio with:
+
+97.5% VaR = ₹10 million
+
+In the worst 2.5% of cases, losses average ₹18 million
+
+
+Then:
+
+VaR = ₹10M
+
+ES = ₹18M
+→ ES reflects the true average severity in the tail.
+
+
+
+
+---
+
+Would you like a chart to visually show the difference between VaR and ES on a loss distribution curve?
+
