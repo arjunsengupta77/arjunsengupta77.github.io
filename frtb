@@ -1,0 +1,110 @@
+Here’s the slide-by-slide content for your "Fundamentals of FRTB" 20-minute training. You can copy this into PowerPoint, Google Slides, or Keynote:
+
+
+---
+
+Slide 1: Title Slide
+
+Title:
+Fundamentals of FRTB
+Subtitle:
+Understanding the Revised Market Risk Framework
+Presented by: [Your Name]
+
+
+---
+
+Slide 2: Why FRTB?
+
+Introduced as part of Basel III post-2008 crisis reforms.
+
+Addresses weaknesses in market risk capital models.
+
+Aims to fix inconsistencies between trading vs. banking books.
+
+Replaces VaR with a more risk-sensitive metric: Expected Shortfall.
+
+Objective: Improve risk comparability, consistency, and capture of tail risks.
+
+
+
+---
+
+Slide 3: Key Components of FRTB
+
+Revised Trading Book Boundary: Clearer rules to avoid arbitrage.
+
+Two Approaches:
+
+Standardized Approach (SA) – rule-based, easier to implement.
+
+Internal Models Approach (IMA) – advanced, but desk-level approval needed.
+
+
+Non-Modellable Risk Factors (NMRFs):
+
+Risk factors without sufficient data require conservative capital.
+
+
+
+
+---
+
+Slide 4: Standardized Approach (SA)
+
+Sensitivities-Based Method: Capital based on delta, vega, and curvature.
+
+Risk Classes: Interest Rates, Credit, FX, Equities, Commodities.
+
+Default Risk Charge (DRC): Capital for jump-to-default events.
+
+Residual Risk Add-On (RRAO): Captures risks in exotic trades.
+
+SA is transparent, prescriptive, and easier for smaller firms.
+
+
+
+---
+
+Slide 5: Internal Models Approach (IMA)
+
+Expected Shortfall replaces VaR – better tail risk capture.
+
+Liquidity Horizons applied to each risk factor (10–120 days).
+
+P&L Attribution (PLAT): Ensures models reflect trading desk performance.
+
+Desk-Level Approval: Each desk must pass tests for IMA usage.
+
+Desks failing tests default to SA – usually with higher capital.
+
+
+
+---
+
+Slide 6: Challenges & Wrap-Up
+
+Challenges:
+
+Data quality and volume requirements.
+
+Operational and infrastructure upgrades.
+
+Higher capital for desks not approved under IMA.
+
+
+Wrap-Up:
+
+FRTB is more than compliance—it's a shift in market risk management.
+
+Aligns risk and front-office practices.
+
+Encourages transparency and comparability across institutions.
+
+
+
+
+---
+
+Would you like this content in .pptx format or a Google Slides link?
+
