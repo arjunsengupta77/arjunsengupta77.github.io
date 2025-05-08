@@ -1,0 +1,207 @@
+The Trading Book–Banking Book boundary was a key weakness in the old Basel II framework. Under FRTB, this boundary is significantly tightened to reduce regulatory arbitrage. Here's the comparison:
+
+
+---
+
+Old Framework (Pre-FRTB)
+
+Vague criteria: Banks had more discretion to choose whether a position belonged to the trading or banking book.
+
+Regulatory arbitrage: Banks could place riskier or capital-intensive assets in the book with lower capital charges.
+
+Inconsistent treatment: Identical instruments could be in different books across banks.
+
+
+
+---
+
+FRTB Framework (New Rules)
+
+Clear rules:
+
+Prescriptive criteria for what qualifies as trading book (e.g., held for short-term resale, profit from price changes).
+
+Explicit list of instruments disallowed from trading book (e.g., unhedged credit loans).
+
+
+Strict approval:
+
+Switching between books requires regulatory approval.
+
+Once reclassified, instruments can't be moved back for a year ("cooling-off" period).
+
+
+Capital impact:
+
+Switching leads to capital add-ons to discourage gaming the system.
+
+
+
+
+---
+
+Why It Matters
+
+Reduces arbitrage between books.
+
+Improves comparability and risk sensitivity across firms.
+
+Encourages consistency in risk treatment across the industry.
+
+
+Would you like a visual diagram comparing the two approaches?
+
+
+
+
+
+Here’s a comparison of the Standardized Approach (SA) for market risk in the old Basel II framework vs the new FRTB Standardized Approach:
+
+
+---
+
+1. Risk Sensitivity
+
+Aspect	Old SA (Basel II)	FRTB SA (New)
+
+Sensitivity to risk	Low	High
+Calculation basis	Not risk-factor based	Based on risk sensitivities (delta, vega, curvature)
+Granularity	Broad categories	Granular buckets within each risk class
+
+
+
+---
+
+2. Risk Classes and Structure
+
+Aspect	Old SA	FRTB SA
+
+Risk categories	IR, FX, Equity, Commodity, Specific Risk	IR, Credit (non-securitized & securitized), FX, Equity, Commodity
+Default risk	Embedded in generic risk weights	Separate Default Risk Charge (DRC)
+Exotic risks	Often ignored or undercapitalized	Residual Risk Add-On (RRAO) captures complex risks
+
+
+
+---
+
+3. Methodology
+
+Aspect	Old SA	FRTB SA
+
+Position classification	By instrument type	By sensitivity to defined risk factors
+Risk weight assignment	Fixed tables	Risk weights tied to risk buckets, adjusted by correlations
+Correlation treatment	Often implicit or none	Explicit correlations used in aggregation formula
+
+
+
+---
+
+4. Capital Requirements
+
+Aspect	Old SA	FRTB SA
+
+Capital conservatism	In some cases underestimated risk	More conservative, especially for less liquid assets
+Capital comparability	Poor across banks	Improved consistency across firms due to prescribed formula
+
+
+
+---
+
+Key Improvements in FRTB SA
+
+Much more granular and risk-sensitive.
+
+Better alignment with actual risk exposure.
+
+Introduces systematic treatment of hedging and diversification.
+
+Designed to be a viable alternative when IMA isn't approved.
+
+
+
+---
+
+Would you like this in slide format too?
+
+
+
+Here's a detailed comparison of the Internal Models Approach (IMA) for market risk — Old (Basel II) vs New (FRTB):
+
+
+---
+
+1. Risk Measure
+
+Aspect	Old IMA (Basel II)	FRTB IMA
+
+Core metric	Value at Risk (VaR) at 99%, 10-day horizon	Expected Shortfall (ES) at 97.5%, liquidity horizon-based
+Tail risk capture	Weak — VaR ignores tail beyond 99%	Strong — ES accounts for losses in the tail
+Stress testing	Separate "Stressed VaR" add-on	Stress Period ES is integral to the model
+
+
+
+---
+
+2. Model Approval & Use
+
+Aspect	Old IMA	FRTB IMA
+
+Approval	At bank level	At desk level (each desk must be approved)
+Model scope	Aggregated	Desk-by-desk approval and aggregation
+Flexibility	More discretion in modelling	Stricter rules, validation, and backtesting
+
+
+
+---
+
+3. Risk Factor Treatment
+
+Aspect	Old IMA	FRTB IMA
+
+Risk factor eligibility	Loosely defined	Must meet data and liquidity criteria
+Non-Modellable Risk Factors (NMRFs)	Not explicitly addressed	Explicit capital requirement for NMRFs
+Liquidity	Uniform 10-day horizon	Risk-factor-specific liquidity horizons (10–120 days)
+
+
+
+---
+
+4. Testing & Governance
+
+Aspect	Old IMA	FRTB IMA
+
+Backtesting	Only daily VaR vs actual P&L	Backtesting + P&L Attribution (PLAT) required
+PLAT	Not required	Mandatory – compares risk-theoretical vs hypothetical P&L
+Failure impact	Warning & capital multiplier	Loss of IMA eligibility for that desk; must switch to SA
+
+
+
+---
+
+5. Capital Impact and Implications
+
+Aspect	Old IMA	FRTB IMA
+
+Capital outcomes	Potential underestimation	Generally more conservative & risk-sensitive
+Implementation cost	Moderate	High – requires major infrastructure & data upgrades
+
+
+
+---
+
+Summary of Key Improvements in FRTB IMA
+
+Better tail risk capture via Expected Shortfall
+
+Risk-factor granularity with liquidity horizons
+
+Desk-level approval ensures model relevance and accountability
+
+PLAT and NMRFs improve accuracy and limit model overuse
+
+
+
+---
+
+Would you like this formatted for a presentation slide or one-pager handout?
+
