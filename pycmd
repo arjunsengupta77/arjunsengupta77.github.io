@@ -1,0 +1,37 @@
+@echo off
+setlocal enabledelayedexpansion
+
+:: Define variables
+set BASEDIR=C:\Users\%USERNAME%\py
+set ENVNAME=env_31010
+set PYTHONVERSION=3.10.10
+
+:: Step 1: Create py directory if it doesn't exist
+if not exist "%BASEDIR%" (
+    mkdir "%BASEDIR%"
+)
+cd /d "%BASEDIR%"
+
+:: Step 2: Run useafs.cmd (network script)
+call \\ms\dist\winaurora\PROJ\compat\incr\bin\useafs.cmd
+
+:: Step 3: Load required modules
+module load msde/artifactory-eng-tools/prod
+module load python/core/%PYTHONVERSION%
+
+:: Step 4: Run setup_user CLI for pypi
+setup_user -cli pypi
+
+:: Step 5: Create virtual environment with system-site-packages
+python -m venv %ENVNAME% --system-site-packages
+
+:: Step 6: Activate the virtual environment
+call "%BASEDIR%\%ENVNAME%\Scripts\activate.bat"
+
+:: Step 7: Upgrade pip
+python -m pip install --upgrade pip -v
+
+echo.
+echo === Python environment setup completed successfully ===
+pause
+endlocal
