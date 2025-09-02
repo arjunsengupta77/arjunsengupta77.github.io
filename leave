@@ -1,0 +1,281 @@
+Perfect 👌 — let’s build a minimal Flask app with SQLite + Jinja templates.
+
+I’ll break it into small pieces so you can plug them in:
+
+
+---
+
+1. Project structure
+
+leave_app/
+│── app.py
+│── leave.db
+│── templates/
+│    ├── base.html
+│    ├── submit_leave.html
+│    ├── leaves.html
+│    └── calendar.html
+
+
+---
+
+2. Database schema (SQLite)
+
+We’ll create two tables: users and leaves.
+
+-- schema.sql
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS leaves;
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    role TEXT NOT NULL CHECK(role IN ('member','lead'))
+);
+
+CREATE TABLE leaves (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','approved','rejected')),
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+Run once:
+
+sqlite3 leave.db < schema.sql
+
+And insert a few users:
+
+INSERT INTO users (name, role) VALUES ('Alice','member'),('Bob','member'),('Charlie','lead');
+
+
+---
+
+3. Flask app (app.py)
+
+from flask import Flask, render_template, request, redirect, url_for, g
+import sqlite3
+from datetime import datetime, timedelta
+
+app = Flask(__name__)
+DATABASE = "leave.db"
+
+
+def get_db():
+    db = getattr(g, "_database", None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+        db.row_factory = sqlite3.Row
+    return db
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, "_database", None)
+    if db is not None:
+        db.close()
+
+
+# --- Routes ---
+@app.route("/")
+def index():
+    return render_template("base.html")
+
+
+@app.route("/submit_leave", methods=["GET", "POST"])
+def submit_leave():
+    db = get_db()
+    if request.method == "POST":
+        user_id = request.form["user_id"]
+        start_date = request.form["start_date"]
+        end_date = request.form["end_date"]
+
+        db.execute(
+            "INSERT INTO leaves (user_id, start_date, end_date) VALUES (?,?,?)",
+            (user_id, start_date, end_date),
+        )
+        db.commit()
+        return redirect(url_for("submit_leave"))
+
+    users = db.execute("SELECT * FROM users WHERE role='member'").fetchall()
+    return render_template("submit_leave.html", users=users)
+
+
+@app.route("/leaves", methods=["GET", "POST"])
+def leaves():
+    db = get_db()
+    if request.method == "POST":
+        leave_id = request.form["leave_id"]
+        action = request.form["action"]
+        db.execute("UPDATE leaves SET status=? WHERE id=?", (action, leave_id))
+        db.commit()
+        return redirect(url_for("leaves"))
+
+    leaves = db.execute(
+        """
+        SELECT l.id, u.name, l.start_date, l.end_date, l.status
+        FROM leaves l
+        JOIN users u ON l.user_id = u.id
+        ORDER BY l.start_date
+        """
+    ).fetchall()
+    return render_template("leaves.html", leaves=leaves)
+
+
+@app.route("/calendar")
+def calendar():
+    db = get_db()
+    approved = db.execute(
+        "SELECT start_date, end_date FROM leaves WHERE status='approved'"
+    ).fetchall()
+
+    # Count leaves per day
+    heatmap_data = {}
+    for row in approved:
+        start = datetime.strptime(row["start_date"], "%Y-%m-%d")
+        end = datetime.strptime(row["end_date"], "%Y-%m-%d")
+        current = start
+        while current <= end:
+            key = current.strftime("%Y-%m-%d")
+            heatmap_data[key] = heatmap_data.get(key, 0) + 1
+            current += timedelta(days=1)
+
+    return render_template("calendar.html", data=heatmap_data)
+
+
+---
+
+4. Templates
+
+templates/base.html
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leave App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="p-4">
+  <h1 class="mb-4">Leave Management</h1>
+  <nav>
+    <a href="{{ url_for('submit_leave') }}">Submit Leave</a> |
+    <a href="{{ url_for('leaves') }}">Manage Leaves</a> |
+    <a href="{{ url_for('calendar') }}">Calendar</a>
+  </nav>
+  <hr>
+  {% block content %}{% endblock %}
+</body>
+</html>
+
+
+---
+
+templates/submit_leave.html
+
+{% extends "base.html" %}
+{% block content %}
+<h2>Submit Leave</h2>
+<form method="POST">
+  <div class="mb-3">
+    <label>User</label>
+    <select name="user_id" class="form-select">
+      {% for u in users %}
+      <option value="{{ u.id }}">{{ u.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label>Start Date</label>
+    <input type="date" name="start_date" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label>End Date</label>
+    <input type="date" name="end_date" class="form-control" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
+
+
+---
+
+templates/leaves.html
+
+{% extends "base.html" %}
+{% block content %}
+<h2>Pending & Approved Leaves</h2>
+<table class="table">
+  <thead>
+    <tr><th>User</th><th>From</th><th>To</th><th>Status</th><th>Action</th></tr>
+  </thead>
+  <tbody>
+    {% for l in leaves %}
+    <tr>
+      <td>{{ l.name }}</td>
+      <td>{{ l.start_date }}</td>
+      <td>{{ l.end_date }}</td>
+      <td>{{ l.status }}</td>
+      <td>
+        {% if l.status == 'pending' %}
+        <form method="POST" style="display:inline">
+          <input type="hidden" name="leave_id" value="{{ l.id }}">
+          <button class="btn btn-success btn-sm" name="action" value="approved">Approve</button>
+          <button class="btn btn-danger btn-sm" name="action" value="rejected">Reject</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+
+---
+
+templates/calendar.html
+
+{% extends "base.html" %}
+{% block content %}
+<h2>Calendar Heatmap</h2>
+<div id="heatmap"></div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  const data = {{ data|tojson }};
+  const dates = Object.keys(data);
+  const values = Object.values(data);
+
+  const trace = {
+    x: dates,
+    y: values,
+    type: 'bar'
+  };
+
+  Plotly.newPlot('heatmap', [trace], {
+    title: 'Leaves per Day',
+    xaxis: { title: 'Date' },
+    yaxis: { title: 'Number of People on Leave' }
+  });
+</script>
+{% endblock %}
+
+
+---
+
+✅ This gives you:
+
+Leave submission form (/submit_leave)
+
+Lead dashboard to approve/reject (/leaves)
+
+Heatmap (/calendar)
+
+
+
+---
+
+Do you want me to extend this into a real heatmap calendar (like GitHub contributions view with colored cells) instead of the simple bar chart?
+
