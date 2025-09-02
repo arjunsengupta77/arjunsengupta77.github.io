@@ -1,0 +1,32 @@
+# PowerShell script to automate Python virtual environment setup
+
+# Define variables
+$BaseDir = "C:\pyvenv"
+$EnvName = "env_31010"
+$PythonVersion = "3.10.10"
+
+# Step 1: Create pyvenv directory if not exists
+if (-Not (Test-Path $BaseDir)) {
+    New-Item -Path $BaseDir -ItemType Directory | Out-Null
+}
+Set-Location $BaseDir
+
+# Step 2: Run useafs.cmd (network script)
+& "\\ms\dist\winaurora\PROJ\compat\incr\bin\useafs.cmd"
+
+# Step 3: Load required modules (assuming 'module' is available in your environment)
+cmd /c "module load msde/artifactory-eng-tools/prod"
+cmd /c "module load python/core/$PythonVersion"
+
+# Step 4: Run setup_user CLI for pypi
+cmd /c "setup_user -cli pypi"
+
+# Step 5: Create virtual environment with system-site-packages
+python -m venv $EnvName --system-site-packages
+
+# Step 6: Activate the virtual environment
+$ActivatePath = Join-Path $BaseDir "$EnvName\Scripts\Activate.ps1"
+. $ActivatePath
+
+# Step 7: Upgrade pip
+python -m pip install --upgrade pip -v
